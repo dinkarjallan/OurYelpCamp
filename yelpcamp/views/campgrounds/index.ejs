@@ -1,0 +1,47 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+    <div id="map" class="mb-3 cluster-map"></div>
+
+    <h1>All Campgrounds</h1>
+    <div>
+        <a class="btn btn-outline-info mb-3" href="/campgrounds/new">Add a Campground</a>
+    </div>
+
+    <% for(let campground of campgrounds) { %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- selecting to show either a random image, or one of the uploaded images in the index thumnail -->
+                    <% if(campground.images.length) { %> 
+                    <img class="img-fluid" src="<%=campground.images[0].url%>" alt="">
+                    <% } else { %> 
+                        <img class="img-fluid" src="https://res.cloudinary.com/dk8jzfr34/image/upload/v1630133545/Yelpcamp/uq0n8l6ctyeitvdm6qce.jpg" alt="">
+                    <% } %> 
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=campground.title%>
+                            <%#campground.properties.popUpMarkup%>
+                        </h5>
+                        <p class="card-text">
+                            <%=campground.description%>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <%=campground.location%>
+                            </small>
+                        </p>
+                        <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">Visit <%=campground.title%>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <script>
+            const mapToken = '<%-process.env.MAPBOX_TOKEN%>'; // script to pass in the client side from the server side, to another script tag
+            const campgrounds = {features:<%-JSON.stringify(campgrounds)%>} // doing the same with all campgrounds instance, and parsing it with a key of "features" || fix the syntax error soon! and then switch-back the auto-formating 
+        </script>
+        <script src="/javascripts/clusterMap.js"></script>
